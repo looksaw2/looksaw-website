@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on looksaw的网站</title>
+    <link>https://your_domain.com/tags/</link>
+    <description>Recent content in Tags on looksaw的网站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>xdu2814031084@gmail.com (looksaw)</managingEditor>
+    <webMaster>xdu2814031084@gmail.com (looksaw)</webMaster>
+    <copyright>2025 looksaw</copyright>
+    <lastBuildDate>Sat, 11 Oct 2025 10:00:00 +0800</lastBuildDate><atom:link href="https://your_domain.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Blowfish</title>
+      <link>https://your_domain.com/tags/blowfish/</link>
+      <pubDate>Sat, 11 Oct 2025 10:00:00 +0800</pubDate>
+      <author>xdu2814031084@gmail.com (looksaw)</author>
+      <guid>https://your_domain.com/tags/blowfish/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Hugo</title>
+      <link>https://your_domain.com/tags/hugo/</link>
+      <pubDate>Sat, 11 Oct 2025 10:00:00 +0800</pubDate>
+      <author>xdu2814031084@gmail.com (looksaw)</author>
+      <guid>https://your_domain.com/tags/hugo/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>博客</title>
+      <link>https://your_domain.com/tags/%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Sat, 11 Oct 2025 10:00:00 +0800</pubDate>
+      <author>xdu2814031084@gmail.com (looksaw)</author>
+      <guid>https://your_domain.com/tags/%E5%8D%9A%E5%AE%A2/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

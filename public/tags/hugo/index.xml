@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hugo on looksaw的网站</title>
+    <link>https://your_domain.com/tags/hugo/</link>
+    <description>Recent content in Hugo on looksaw的网站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <managingEditor>xdu2814031084@gmail.com (looksaw)</managingEditor>
+    <webMaster>xdu2814031084@gmail.com (looksaw)</webMaster>
+    <copyright>2025 looksaw</copyright>
+    <lastBuildDate>Sat, 11 Oct 2025 10:00:00 +0800</lastBuildDate><atom:link href="https://your_domain.com/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>我的第一篇 Blowfish 博客</title>
+      <link>https://your_domain.com/posts/excel_with_python/</link>
+      <pubDate>Sat, 11 Oct 2025 10:00:00 +0800</pubDate>
+      <author>xdu2814031084@gmail.com (looksaw)</author>
+      <guid>https://your_domain.com/posts/excel_with_python/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

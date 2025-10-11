@@ -12,7 +12,7 @@ draft: false          # 是否为草稿（true 则不发布，默认 false）
 
 ## 正文标题
 
-这是一段正文，欢迎使用 Blowfish 主题！
+这是一段go代码的正文，欢迎使用 Blowfish 主题！
 
 ## 代码示例
 ```go

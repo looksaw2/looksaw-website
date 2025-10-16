@@ -285,3 +285,215 @@ public class ProductFilter implements IFilter<Product> {
 ```
 
 C#的版本
+```csharp
+public enum Color
+{
+    RED,
+    GREEN,
+    BLUE
+}
+
+public enum Size
+{
+    SMALL,
+    MEDIUM,
+    LARGE,
+    YUGA
+}
+
+
+public class Product
+{
+    public readonly string name;
+    public Color color;
+    public Size size;
+    
+    public Product(string name, Color color, Size size)
+    {
+        this.name = name;
+        this.color = color;
+        this.size = size;
+    }
+}
+
+public class ProductBasicFilter
+{
+    public static IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
+    {
+        return products.Where(p => p.color == color);
+    }
+
+    public static IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
+    {
+        return products.Where(p => p.size == size);
+    }
+}
+
+
+
+public interface ISpec<T>
+{
+    public bool IsSatisfied(T t);
+}
+
+public interface IFilter<T>
+{
+    public IEnumerable<T> Filter(IEnumerable<T> items, ISpec<T> spec);
+}
+
+
+
+public class ColorSpec : ISpec<Product>
+{
+    private Color color;
+    public ColorSpec(Color color)
+    {
+        this.color = color;
+    }
+    public bool IsSatisfied(Product t)
+    {
+        return t.color == color;
+    }
+}
+
+
+public class SizeSpec : ISpec<Product>
+{
+    private Size size;
+    public SizeSpec(Size size)
+    {
+        this.size = size;
+    }
+
+    public bool IsSatisfied(Product t)
+    {
+        return t.size == size;
+    }
+}
+
+
+public class BetterFilter : IFilter<Product>
+{
+    public IEnumerable<Product> Filter(IEnumerable<Product> items, ISpec<Product> spec)
+    {
+        return items.Where(p => spec.IsSatisfied(p));
+    }
+} 
+```
+
+### Builder模式
+fluent API模式，向传统的类New的时候容易弄不清参数的顺序，所以可以采用fluent API的模式来改造.
+```java
+public class Person {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    private String position;
+    
+    public Person(String name , String position){
+        this.name = name;
+        this.position = position;
+    }
+    
+}
+
+```
+但是使用fluent API进行改造之后可以变成
+```java
+public Person withName(String name){
+    setName(name);
+    return this;
+}
+public Person withPosition(String position){
+    setPosition(position);
+    return this;
+}
+public static void main(String[] args){
+    var p = new Person()
+            .withName("lili")
+            .withPosition("junior");
+    System.out.println(p);
+}
+```
+但是更进一步的，我们希望使用builder模式
+```java
+public static class Builder {
+    private String name;
+    private String position;
+    public Builder WithName(String name){
+        this.name = name;
+        return this;
+    }
+    public Builder WithPosition(String position){
+        this.position = position;
+        return this;
+    }
+    public Person build(){
+        return new Person(this);
+    }
+}
+```
+
+#### 其他语言的版本
+```csharp
+public class Person
+{
+    public string Name { get; set; } = null;
+    public string Position { get; set; } = null;
+    
+    public override string ToString()
+    {
+        return $"{nameof(Name)} : {Name}, {nameof(Position)} : {Position}";
+    }
+
+    public class Builder
+    {
+        public string name { get; set; }
+        public string position { get; set; }
+
+        public Builder WithName(string name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        public Builder WithPosition(string position)
+        {
+            this.position = position;
+            return this;
+        }
+
+        public Person Build()
+        {
+            return new Person(this);
+        }
+    }
+
+    public Person(Builder builder)
+    {
+        this.Name = builder.name;
+        this.Position = builder.position;
+    }
+
+    public static Builder CreateBuilde()
+    {
+        return new Builder();
+    }
+}
+
+```

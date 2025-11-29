@@ -127,3 +127,115 @@ IEnumerable<Film> GetFilmsByGenre(string genre)
 ```csharp
 IEnumerable<Film> GetFilmsByGenre(string genre) => fakeData.Where(x => x.genre == genre);
 ```
+对于常见的初始化的方法在函数式编程的方案可以和常见的OOP的方案有所不同，可以如下面的初始化方法
+```csharp
+var a = Enumerable.Range(1,10)
+var s = string.Join(",",a)
+```
+这样就可以完成从1-10的List,并且可以转化为string，并且可以从打印9x9的乘法表，并且可以使用下面的方案来代替以往的生成的9x9的乘法表。（下面是生成一个5x5的表格）
+```csharp
+var nineTimesTable = Enumerable.Range(1,5)
+                        .SelectMany(x => Enumerable.Range(1,5)
+                        .Select(y => (X : x , Y : y))
+                        );
+```
+得到的是(1,1),(1,2),(1,3),(1,4),(1,5),(2,1),(2,2).....
+如果想要得到相反的(5,5),(5,4),(5,3),(5,2) .....，那么可以这么来实现
+```csharp
+var gridCoords = Enumerable.Repeat(5,5).Select((x,i) => x - i)
+                .SelectMany(x => Enumerable.Repeat(5,5)
+                    .Select((y,i) => (x,y-i))
+                );
+```
+一个更加有效的的改进是可以以下面这个验证器作为例子，如果使用OOP的方式来判断密码的验证函数是否有效可以简单的写出如下的代码
+```csharp
+public bool IsPasswordValid(string password){
+   if(password.Length <= 6){
+    return false;
+   } 
+   if(password.Length > 20){
+    return false;
+   }
+}
+```
+但是如果使用函数式编码的方式来重构这段代码，就可以写出如下的代码:
+
+```csharp
+public bool IsPasswordValid(string password) => 
+    new Func<string,bool>[]
+    {
+        x => x.Length > 6,
+        x => x.Length <= 20
+    }.All(f => f(password));
+```
+
+但是这个还是不够优雅，我们可以将.All()方法剥离出来，形成一个泛型的扩展方法，从常识上面可以看出，
+我们需要的验证函数是Func<T,bool> rule显然其入参是一个泛型T,其返回值是一个bool,然后根据学习的C#知识可以得到:
+
+```csharp
+static class ValidExtensions
+{
+    public static bool IsPasswordValid<T>(this T @this , params Func<T,bool>[] rules) => rules.All(rule => rule(@this));
+}
+```
+
+然后验证方法就可以简单的写出如下的代码:
+```csharp
+bool IsPasswordValid(string password) =>
+    password.IsPasswordValid(
+        x => x.Length > 6,
+        x => x.Length < 10
+    );
+```
+
+同样的如果验证其不是Valid的呢，便可以写出下面的泛型方法:
+
+```csharp
+public static bool IsPasswordInvalid<T>(this T @this, params Func<T,bool>[] rules) => rules.Any(rule => !rule(@this));
+```
+
+3. 一些常见的函数式的编程方法
+fork combinator使用多种方式处理单个数值，如下面的一个典型的例子:
+```csharp
+var triangle = (300, 400);
+var hypotenuse = triangle.Fork(
+    x => Math.Pow(x.Item1,2),
+    x => Math.Pow(x.Item2,2),
+    (s , b) => Math.Sqrt(s+b)
+);
+public static Tout Fork<Tin, T1, T2, Tout>(
+        this Tin @this,
+        Func<Tin, T1> f1,
+        Func<Tin, T2> f2,
+        Func<T1, T2, Tout> fout)
+    {
+        var p1 = f1(@this);
+        var p2 = f2(@this);
+        var result = fout(p1, p2);
+        return result;
+    }
+```
+显然这是一种将多个数值转为单个数值并且执行之后聚合的例子，将三角形的两条边每条边分别计算其平方(这里不是并行)，然后再聚合的方法，当然这里的函数只使用了两个，并且一般的我们可以将函数扩展到无数个分开的函数然后再进行聚合，其具体的实现如下:
+```csharp
+
+    public static TEnd Fork<Tin, TMid, TEnd>(
+        this Tin @this,
+        Func<IEnumerable<TMid>, TEnd> joinFunction,
+        params Func<Tin, TMid>[] prongs)
+    {
+        var intermediateValue = prongs.Select(x => x(@this));
+        var result = joinFunction(intermediateValue);
+        return result;
+    }
+```
+具体的编程流程可以有如下的流程来展示:
+![](./fork_combinator.png)
+第二个可以使用的是Alt组合子，将相同的目标函数绑定在一起，然后将参数依次的开始执行，如果有一个成功就成功，这个类似于Or方法，下面是C#代码的具体的实现
+```csharp
+   public static TOut Alt<TIn, TOut>(
+        this TIn @this,
+        params Func<TIn, TOut>[] args) =>
+        args.Select(x => x(@this))
+            .First(x => x != null);
+```
+
